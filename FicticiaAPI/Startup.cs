@@ -10,6 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Persistencia.Data;
+using Persistencia.Interfaces;
 
 namespace FicticiaAPI
 {
@@ -27,10 +30,15 @@ namespace FicticiaAPI
         {
 
             services.AddControllers();
+            services.AddDbContext<ContextoFicticia>(x =>
+                x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IEnfermedadRepository, EnfermedadRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FicticiaAPI", Version = "v1" });
             });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
